@@ -1,0 +1,390 @@
+doctype html
+html.no-js(lang='en')
+  head
+    title Records
+    meta(charset='UTF-8')
+    script(src="/javascripts/script.js")
+    link(rel='stylesheet', href='/stylesheets/style.css')
+  body
+    .header-cont
+    #mySidenav.sidenav
+      #recordtitle
+      #coverimage
+      #typeIcon
+      #commentsLabel
+      #myComments
+      #downloadButton
+      #deleteButton
+    #myCenternav.centernav
+      button#genericButton.mybutton
+        img(src='assets/addRecord.png', height='50px', width='50px')
+        br
+        | Add Record
+      button#imageButton.mybutton
+        img(src='assets/addImage.png', height='50px', width='50px')
+        br
+        | Upload Image
+      button#videoButton.mybutton
+        img(src='assets/addVideo.png', height='50px', width='50px')
+        br
+        | Upload Video
+      button#audioButton.mybutton
+        img(src='assets/addAudio.png', height='50px', width='50px')
+        br
+        | Upload Audio
+      button#hyperlinkButton.mybutton
+        img(src='assets/addHyperlink.png', height='50px', width='50px')
+        br
+        | Upload Hyperlink
+    #imageModal.modal
+      // Modal content
+      .file-modal-content
+        .header 
+          h1 Upload Image
+          span.imageclose#close ×
+        form#imageForm(ref='uploadForm'  method='post', action='uploadImage', onsubmit="return validateFormImage()", enctype='multipart/form-data')
+          label#titleLabel Title 
+          br
+          input#myTitle(type='text', name='title')
+          br
+          br
+          label#fileLabel Select Image
+          input#imageToUpload.inputfile(type='file', name='imageToUpload', onchange= "changeImageFile(this)", data-multiple-caption='{count} files selected', multiple='')
+          label#imageFileButton(for='imageToUpload') Choose a file
+          br
+          label#coverLabel Thumbnail
+          br
+          label#optionalLabel (optional)
+          input#imageCoverToUpload.inputfile(type='file', name='imageCoverToUpload', onchange= "changeImageCover(this)", data-multiple-caption='{count} files selected', multiple='')
+          label#imageCoverButton(for='imageCoverToUpload') Choose a file
+          br
+          label#commentLabel Description
+          br
+          textarea#comments(type='text', size='100', name='comments')
+          br
+          label#optionalCommentLabel (optional)
+          input#uploadButton(type='submit', value='Upload', name='submit')
+          br
+          label.titleError#imageTitleError 
+          br
+          label.fileError#imageFileError 
+          br
+          label.coverError#imageCoverError 
+          br
+          label.commentError#imageCommentError 
+    #audioModal.modal
+      // Modal content
+      .file-modal-content
+        .header 
+          h1 Upload Audio
+          span.audioclose#close ×
+        form#audioForm(ref='uploadForm' action='uploadAudio', onsubmit="return validateFormAudio()", method='post', enctype='multipart/form-data')
+          label#titleLabel Title 
+          br
+          input#myTitle(type='text', name='title')
+          br
+          br
+          label#fileLabel Select Audio
+          input#audioToUpload.inputfile(type='file', name='audioToUpload', onchange= "changeAudioFile(this)", data-multiple-caption='{count} files selected', multiple='')
+          label#audioFileButton(for='audioToUpload') Choose a file
+          br
+          label#coverLabel Thumbnail
+          br
+          label#optionalLabel (optional)
+          input#audioCoverToUpload.inputfile(type='file', name='audioCoverToUpload', onchange= "changeAudioCover(this)", data-multiple-caption='{count} files selected', multiple='')
+          label#audioCoverButton(for='audioCoverToUpload') Choose a file
+          br
+          label#commentLabel Description
+          br
+          textarea#comments(type='text', size='100', name='comments')
+          br
+          label#optionalCommentLabel (optional)
+          input#uploadButton(type='submit', value='Upload', name='submit')
+          br
+          label.titleError#audioTitleError 
+          br
+          label.fileError#audioFileError 
+          br
+          label.coverError#audioCoverError 
+          br
+          label.commentError#audioCommentError 
+    #videoModal.modal
+      // Modal content
+      .file-modal-content
+        .header 
+          h1 Upload Video
+          span.videoclose#close ×
+        form#videoForm(ref='uploadForm' action='uploadVideo', onsubmit="return validateFormVideo()", method='post', enctype='multipart/form-data')
+          label#titleLabel Title 
+          br
+          input#myTitle(type='text', name='title')
+          br
+          br
+          label#fileLabel Select Video
+          input#videoToUpload.inputfile(type='file', name='videoToUpload', onchange= "changeVideoFile(this)", data-multiple-caption='{count} files selected', multiple='')
+          label#videoFileButton(for='videoToUpload') Choose a file
+          br
+          label#coverLabel Thumbnail
+          br
+          label#optionalLabel (optional)
+          input#videoCoverToUpload.inputfile(type='file', name='videoCoverToUpload', onchange= "changeVideoCover(this)", data-multiple-caption='{count} files selected', multiple='')
+          label#videoCoverButton(for='videoCoverToUpload') Choose a file
+          br
+          label#commentLabel Description
+          br
+          textarea#comments(type='text', size='100', name='comments')
+          br
+          label#optionalCommentLabel (optional)
+          input#uploadButton(type='submit', value='Upload', name='submit')
+          br
+          label.titleError#videoTitleError 
+          br
+          label.fileError#videoFileError 
+          br
+          label.coverError#videoCoverError 
+          br
+          label.commentError#videoCommentError 
+    #hyperlinkModal.modal
+      // Modal content
+      .file-modal-content
+        .header 
+          h1 Upload Hyperlink
+          span.hyperlinkclose#close ×
+        form#hyperlinkForm(ref='uploadForm' action='uploadHyperlink', onsubmit="return validateFormHyperlink()" , method='post', enctype='multipart/form-data')
+          label#titleLabel Title 
+          br
+          input#myTitle(type='text', name='title')
+          br
+          br
+          label#hyperlinkLabel Hyperlink
+          input#hyperlinkToUpload(type='text', name='hyperlink')
+          br
+          label#coverLabel Thumbnail
+          br
+          label#optionalLabel (optional)
+          input#hyperlinkCoverToUpload.inputfile(type='file', name='hyperlinkCoverToUpload', onchange= "changeHyperlinkCover(this)", data-multiple-caption='{count} files selected', multiple='')
+          label#hyperlinkCoverButton(for='hyperlinkCoverToUpload') Choose a file
+          br
+          label#commentLabel Description
+          br
+          textarea#comments(type='text', size='100', name='comments')
+          br
+          label#optionalCommentLabel (optional)
+          input#uploadButton(type='submit', value='Upload', name='submit')
+          br
+          label.titleError#hyperlinkTitleError 
+          br
+          label.fileError#hyperlinkFileError 
+          br
+          label.coverError#hyperlinkCoverError 
+          br
+          label.commentError#hyperlinkCommentError 
+    #genericModal.modal
+      // Modal content
+      .modal-content
+        .generic-header
+          h1 Add Record
+          span.genericclose#close ×
+       .generic
+        form(action='', method='post', enctype='multipart/form-data')
+          | Step 1: Choose a medium*
+          br
+          .styled-select
+            select#medium(name='medium')
+              option(value='Sculpture') Sculpture
+              option(value='Book') Book
+              option(value='Painting') Painting
+          | 			Step 2: Record Detail
+          br
+          .titlearea
+            | 			  Title*
+            p.tiny What's this record? i.e. The URL of a link, the subtitle of a book, etc.
+            br
+            textarea#titletextarea(type='text', size='100', name='title')
+          br
+          .whowhere
+            | 			  Who, what, where, when ...
+            p.tiny i.e. fabricated, published, performed, exhibited, etc.
+            .pby
+              | 			  Published by*
+              .styled-select.published
+                select#published(name='medium')
+                  option(value='Name') Name
+              input#pLocation(type='text', name='publisherLocation', placeholder='Location')
+              input#pDate(type='text', name='publisherDate', placeholder='Date')
+            br
+            .pby
+              | 			  Performed by*
+              .styled-select.published
+                select#published(name='medium')
+                  option(value='Name') Name
+              input#pLocation(type='text', name='performerLocation', placeholder='Location')
+              input#pDate(type='text', name='performerDate', placeholder='Date')
+            br
+            .pby
+              | 			  Translated by*
+              .styled-select.published
+                select#published(name='medium')
+                  option(value='Name') Name
+              input#pLocation(type='text', name='translaterLocation', placeholder='Location')
+              input#pDate(type='text', name='translaterDate', placeholder='Date')
+            h1#addmore Add More
+          br
+          .addkeywords
+            | 			  Add Keywords
+            br
+            input#keywords(type='text', name='keywords')
+            br
+            | 			  Add Notes i.e. materials, languages
+            br
+            input#notes(type='text', name='notes')
+            br
+            | 			  Relationship to Other Works?
+            br
+            .styled-select.relationshipwith
+              select#published(name='medium')
+                option(value='Name') Adapted From
+            .styled-select.Empty
+              select#published(name='medium')
+                option(value='Name') 
+          input#submitButton(type='submit', value='Submit', name='submit', onsubmit="return false")
+    section#results
+      for record in records
+        #bodyLeft(onclick="showRecord(#{record.recordnumber}, '#{record.title}', '#{record.recordtype}', #{record.coverphoto}, '#{record.comments}', '#{record.filelink}', '#{record.coverlink}')")
+          if(record.coverphoto == 1)
+            img(src='covers/#{record.recordnumber}.jpg', width="152", height="114")
+          else
+            img(src='assets/placeholder.png', width="152", height="114")
+          br
+          span#title #{record.title}
+          br
+          if(record.recordtype == 'image')
+            img(src='assets/addImage.png', id='typeImage', width="65", height="65")
+          if(record.recordtype == 'audio')
+            img(src='assets/addAudio2.png', id='typeImage', width="58", height="58")
+          if(record.recordtype == 'video')
+            img(src='assets/addVideo2.png', id='typeImage', width="58", height="58")
+          if(record.recordtype == 'hyperlink')
+            img(src='assets/addHyperlink2.png', id='typeImage', width="65", height="65")
+        br
+script.
+
+  function showRecord(recordnumber, title, recordtype, coverphoto, comments, filelink, coverlink)
+  {
+  document.getElementById("mySidenav").style.width = "275px";
+  if(coverphoto == 1)
+  {
+  document.getElementById("coverimage").innerHTML = '<image src="covers/' + recordnumber + '.jpg" style="width:228px;height:171px;">';
+  }
+  else
+  {
+  document.getElementById("coverimage").innerHTML = '<image src="assets/placeholder.png" style="width:228px;height:171px;">';
+  }
+  
+  document.getElementById("coverimage").style.border = "5px solid #283C4F";
+  
+  document.getElementById("myComments").innerHTML = '<p id="description" >' + comments + '</p>';
+  document.getElementById("myComments").style.visibility = "visible";
+  
+  document.getElementById("commentsLabel").innerHTML = '<h3>Description</h3>';
+  
+  
+  
+  if(recordtype == 'image')
+  {
+      document.getElementById("recordtitle").innerHTML = '<br><h2>' + title + '</h2>';
+      document.getElementById("downloadButton").innerHTML = '<a id="myDownloadButton" href="files/' + recordnumber + '.jpg" download="' + title + '.jpg">Download</a>';
+      document.getElementById("typeIcon").innerHTML = '<image src="assets/addImage.png" style="width:98px;height:98px;">';	  
+  }
+  
+  if(recordtype == 'audio')
+  {
+      document.getElementById("recordtitle").innerHTML = '<br><h2>' + title + '</h2>';
+      document.getElementById("downloadButton").innerHTML = '<a id="myDownloadButton" href="files/' + recordnumber + '.mp3" download="' + title + '.mp3">Download</a>';
+      document.getElementById("typeIcon").innerHTML = '<image src="assets/addAudio2.png" style="width:75px;height:75px;">';
+  }
+  if(recordtype == 'video')
+  {
+      document.getElementById("recordtitle").innerHTML = '<br><h2>' + title + '</h2>';
+      document.getElementById("downloadButton").innerHTML = '<a id="myDownloadButton" href="files/' + recordnumber + '.mp4" download="' + title + '.mp4">Download</a>';
+      document.getElementById("typeIcon").innerHTML = '<image src="assets/addVideo2.png" style="width:75px;height:75px;">';
+  }
+  if(recordtype == 'hyperlink')
+  {
+      document.getElementById("recordtitle").innerHTML = '<br><h2>' + title + '</h2>';
+      document.getElementById("downloadButton").innerHTML = '<a id="myDownloadButton" href="https://' + filelink + '" target="_blank">Go To</a>';
+      document.getElementById("typeIcon").innerHTML = '<image src="assets/addHyperlink2.png" style="width:98px;height:98px;">';
+  }
+  document.getElementById("deleteButton").innerHTML = '<form method="post" action="/deleteRecord"><input type="hidden" name="recordnumber" value="' + recordnumber + '"><button id="myDeleteButton" type="submit">Delete</button></form>';
+  }
+      
+      var imageModal = document.getElementById('imageModal');
+      var audioModal = document.getElementById('audioModal');
+      var videoModal = document.getElementById('videoModal');
+      var hyperlinkModal = document.getElementById('hyperlinkModal');
+      var genericModal = document.getElementById('genericModal');
+      // Get the button that opens the modal
+      var btnImage = document.getElementById("imageButton");
+      var btnAudio = document.getElementById("audioButton");
+      var btnVideo = document.getElementById("videoButton");
+      var btnHyperlink = document.getElementById("hyperlinkButton");
+      var btnGeneric = document.getElementById("genericButton");
+      // When the user clicks on the button, open the modal
+      btnImage.onclick = function() {
+      imageModal.style.display = "block";
+      }
+      btnAudio.onclick = function() {
+      audioModal.style.display = "block";
+      }
+      btnVideo.onclick = function() {
+      videoModal.style.display = "block";
+      }
+      btnHyperlink.onclick = function() {
+      hyperlinkModal.style.display = "block";
+      }
+      btnGeneric.onclick = function() {
+      genericModal.style.display = "block";
+      }
+      // Get the <span> element that closes the modal
+      var spanImage = document.getElementsByClassName("imageclose")[0];
+      var spanVideo = document.getElementsByClassName("videoclose")[0];
+      var spanAudio = document.getElementsByClassName("audioclose")[0];
+      var spanHyperlink = document.getElementsByClassName("hyperlinkclose")[0];
+      var spanGeneric = document.getElementsByClassName("genericclose")[0];
+      // When the user clicks on <span> (x), close the modal
+      spanImage.onclick = function() {
+        imageModal.style.display = "none";
+      };      
+      spanVideo.onclick = function() {
+        videoModal.style.display = "none";
+      };
+      spanAudio.onclick = function() {
+        audioModal.style.display = "none";
+      };
+      spanHyperlink.onclick = function() {
+        hyperlinkModal.style.display = "none";
+      };
+      spanGeneric.onclick = function() {
+        genericModal.style.display = "none";
+      };
+      // When the user clicks anywhere outside of the modal, close it
+      window.onclick = function(event) {
+      if (event.target == imageModal) {
+        imageModal.style.display = "none";
+      }
+      if (event.target == audioModal) {
+        audioModal.style.display = "none";
+      }
+      if (event.target == videoModal) {
+        videoModal.style.display = "none";
+      }
+      if (event.target == hyperlinkModal) {
+        hyperlinkModal.style.display = "none";
+      }
+      if (event.target == genericModal) {
+        genericModal.style.display = "none";
+      }
+      };
+	  
+
+	  

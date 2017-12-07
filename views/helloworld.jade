@@ -1,0 +1,212 @@
+doctype html
+html(lang='en')
+  head
+    title Records
+    meta(charset='UTF-8')
+    script(type='text/javascript' src='/javascript/script.js')
+    link(rel='stylesheet', href='/stylesheets/style.css')
+  body
+    .header-cont
+    #mySidenav.sidenav
+      #coverimage
+      #mytitle
+      #comments
+      #downloadButton
+    #myCenternav.centernav
+      button#genericWorkButton
+        img(src='assets/addRecord.png', height='50px', width='50px')
+        br
+        | Add Record
+      button#imageButton
+        img(src='assets/addImage.png', height='50px', width='50px')
+        br
+        | Upload Image
+      button#videoButton
+        img(src='assets/addVideo.png', height='50px', width='50px')
+        br
+        | Upload Video
+      button#audioButton
+        img(src='assets/addAudio.png', height='50px', width='50px')
+        br
+        | Upload Audio
+      button#hyperlinkButton
+        img(src='assets/addHyperlink.png', height='50px', width='50px')
+        br
+        | Upload Hyperlink
+    #imageModal.modal
+      // Modal content
+      .file-modal-content
+        span.close ×
+        form(ref='uploadForm' action='uploadImage', method='post', enctype='multipart/form-data')
+          label(for='title') Record Title: 
+          br
+          input#myTitle(type='text', name='title')
+          br
+          //input(type='hidden', name='recordnumber', value='<?php echo $currentnumber ?>')
+          | 			Cover Image:
+          br
+          input#coverToUpload(type='file', name='coverToUpload')
+          br
+          | 			Select Image to Upload:
+          br
+          input#fileToUpload(type='file', name='fileToUpload')
+          br
+          label(for='comments') Comments: 
+          br
+          textarea#comments(type='text', size='100', name='comments')
+          br
+          input(type='submit', value='Upload', name='submit')
+    #audioModal.modal
+      // Modal content
+      .file-modal-content
+        span.close ×
+        form(ref='uploadForm' action='uploadAudio', method='post', enctype='multipart/form-data')
+          label(for='title') Record Title: 
+          br
+          input#myTitle(type='text', name='title')
+          br
+          //input(type='hidden', name='recordnumber', value='<?php echo $currentnumber ?>')
+          | 			Cover Image:
+          br
+          input#coverToUpload(type='file', name='coverToUpload')
+          br
+          | 			Select Audio File to Upload:
+          br
+          input#fileToUpload(type='file', name='fileToUpload')
+          br
+          label(for='comments') Comments: 
+          br
+          textarea#comments(type='text', size='100', name='comments')
+          br
+          input(type='submit', value='Upload', name='submit') 
+    #videoModal.modal
+      // Modal content
+      .file-modal-content
+        span.close ×
+        form(ref='uploadForm' action='uploadVideo', method='post', enctype='multipart/form-data')
+          label(for='title') Record Title: 
+          br
+          input#myTitle(type='text', name='title')
+          br
+          //input(type='hidden', name='recordnumber', value='<?php echo $currentnumber ?>')
+          | 			Cover Image:
+          br
+          input#coverToUpload(type='file', name='coverToUpload')
+          br
+          | 			Select Video File to Upload:
+          br
+          input#fileToUpload(type='file', name='fileToUpload')
+          br
+          label(for='comments') Comments: 
+          br
+          textarea#comments(type='text', size='100', name='comments')
+          br
+          input(type='submit', value='Upload', name='submit') 
+    #hyperlinkModal.modal
+      // Modal content
+      .file-modal-content
+        span.close ×
+        form(ref='uploadForm' action='uploadHyperlink', method='post', enctype='multipart/form-data')
+          label(for='title') Record Title: 
+          br
+          input#myTitle(type='text', name='title')
+          br
+          //input(type='hidden', name='recordnumber', value='<?php echo $currentnumber ?>')
+          | 			Cover Image:
+          br
+          input#coverToUpload(type='file', name='coverToUpload')
+          br
+          | 			Select Hyperlink to Upload:
+          br
+          input#fileToUpload(type='text', name='hyperlink')
+          br
+          label(for='comments') Comments: 
+          br
+          textarea#comments(type='text', size='100', name='comments')
+          br
+          input(type='submit', value='Upload', name='submit')
+    section#results
+      if(counter == 0)
+      for record in records
+        #bodyLeft(onclick="showRecord(#{record.recordnumber}, '#{record.title}', '#{record.recordtype}', #{record.coverphoto}, '#{record.comments}', '#{record.filelink}', '#{record.coverlink}')")
+          if(record.coverphoto == 1)
+            img(src='covers/#{record.recordnumber}.jpg', width="152", height="114")
+          else
+            img(src='assets/placeholder.png', width="152", height="114")
+          br
+          span#title #{record.title}
+        br
+- counter = 1;
+script.
+
+  function showRecord(recordnumber, title, recordtype, coverphoto, comments, filelink, coverlink)
+  {
+  document.getElementById("mySidenav").style.width = "275px";
+  if(coverphoto == 1)
+  {
+  document.getElementById("coverimage").innerHTML = '<image src="covers/' + recordnumber + '.jpg" style="width:152px;height:114px;position:relative;right:-45px;">';
+  }
+  else
+  {
+  document.getElementById("coverimage").innerHTML = '<image src="assets/placeholder.png" style="width:152px;height:114px;position:relative;right:-45px;">';
+  }
+  document.getElementById("mytitle").innerHTML = '<h2 style="position:relative; right:-35px; top:-20px;">' + title + '</h2>';
+  document.getElementById("comments").innerHTML = '<p>' + comments + '</p>';
+  
+  if(recordtype == 'image')
+  document.getElementById("downloadButton").innerHTML = '<a href="files/' + recordnumber + '.jpg" download="' + title + '.jpg">Download</a>';
+  if(recordtype == 'audio')
+  document.getElementById("downloadButton").innerHTML = '<a href="files/' + recordnumber + '.mp3" download="' + title + '.mp3">Download</a>';
+  if(recordtype == 'video')
+  document.getElementById("downloadButton").innerHTML = '<a href="files/' + recordnumber + '.mp4" download="' + title + '.mp4">Download</a>';
+  if(recordtype == 'hyperlink')
+  document.getElementById("downloadButton").innerHTML = '<a href="https://' + filelink + '">Go To Page</a>';
+
+  }
+      var imageModal = document.getElementById('imageModal');
+      var audioModal = document.getElementById('audioModal');
+      var videoModal = document.getElementById('videoModal');
+      var hyperlinkModal = document.getElementById('hyperlinkModal');
+      // Get the button that opens the modal
+      var btnImage = document.getElementById("imageButton");
+      var btnAudio = document.getElementById("audioButton");
+      var btnVideo = document.getElementById("videoButton");
+      var btnHyperlink = document.getElementById("hyperlinkButton");
+      // When the user clicks on the button, open the modal
+      btnImage.onclick = function() {
+      imageModal.style.display = "block";
+      }
+      btnAudio.onclick = function() {
+      audioModal.style.display = "block";
+      }
+      btnVideo.onclick = function() {
+      videoModal.style.display = "block";
+      }
+      btnHyperlink.onclick = function() {
+      hyperlinkModal.style.display = "block";
+      }
+      // Get the <span> element that closes the modal
+      var span = document.getElementsByClassName("close")[0];
+      // When the user clicks on <span> (x), close the modal
+      span.onclick = function() {
+        imageModal.style.display = "none";
+        audioModal.style.display = "none";
+        videoModal.style.display = "none";
+        hyperlinkModal.style.display = "none";
+      };
+      // When the user clicks anywhere outside of the modal, close it
+      window.onclick = function(event) {
+      if (event.target == imageModal) {
+        imageModal.style.display = "none";
+      }
+      if (event.target == audioModal) {
+        audioModal.style.display = "none";
+      }
+      if (event.target == videoModal) {
+        videoModal.style.display = "none";
+      }
+      if (event.target == hyperlinkModal) {
+        hyperlinkModal.style.display = "none";
+      }
+      };
+
